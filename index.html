@@ -1,0 +1,437 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="theme-color" content="#075e54">
+<title>صادق المرغمي | SADIQ AL-MARGHAMI</title>
+<style>
+:root{--green:#075e54;--accent:#128c7e;--wall:#efeae2;--ink:#23343d;--muted:#647781;--line:#e5e0d8}
+*{box-sizing:border-box}
+body{margin:0;background:#d8e0db;color:var(--ink);font-family:Tahoma,Arial,sans-serif;min-height:100vh;display:flex;justify-content:center}
+.app{width:100%;max-width:760px;min-height:100vh;background:var(--wall);display:flex;flex-direction:column;box-shadow:0 8px 35px #0002}
+header{display:flex;align-items:center;gap:12px;padding:12px 16px;background:var(--green);color:#fff;position:sticky;top:0;z-index:2}
+.admin-entry{background:#fff;color:var(--green);border:1px solid #d6f2e9;border-radius:8px;padding:8px 10px;font-size:12px;font-weight:bold;white-space:nowrap;margin-right:auto}.avatar img{display:block;width:100%;height:100%;object-fit:cover;border-radius:50%}.avatar{width:46px;height:46px;flex:none;border-radius:50%;display:grid;place-items:center;background:#ffffff22;border:1px solid #ffffff55;font-size:22px}
+header h1{font-size:16px;margin:0 0 5px}header p{font-size:12px;color:#d6f2e9;margin:0}.status{margin-right:auto;font-size:11px;color:#d6f2e9;white-space:nowrap}
+main{flex:1;padding:14px;display:flex;flex-direction:column;gap:13px;background-color:var(--wall);background-image:radial-gradient(#cfc8bc 0.65px,transparent .65px);background-size:18px 18px}
+#cover{width:100%;aspect-ratio:1.6;object-fit:cover;display:block;border-radius:12px;border:1px solid #ffffff90}
+.intro{background:#fff;border:1px solid var(--line);border-radius:10px;padding:12px;font-size:13px;line-height:1.9;color:#465a63}
+#chat{display:flex;flex-direction:column;gap:10px}
+.bubble{max-width:94%;padding:11px 13px;border-radius:14px;line-height:1.95;white-space:pre-wrap;overflow-wrap:anywhere;font-size:14px}
+.bot{align-self:flex-start;background:#fff;border:1px solid #e7e2da;border-bottom-right-radius:4px;box-shadow:0 1px 1px #0000000a}
+.user{align-self:flex-end;background:#d9fdd3;border:1px solid #c5edbd;border-bottom-left-radius:4px;box-shadow:0 1px 1px #0000000a}
+.sender{font-size:10px;color:#72818a;margin-bottom:4px}
+#action{border:1px solid var(--line);border-radius:12px;padding:14px;background:#fff}
+#action h2{font-size:15px;color:var(--green);margin:0 0 7px}
+#action p{font-size:12px;line-height:1.8;color:var(--muted);margin:0 0 10px}
+.typing-indicator{font-size:13px;font-weight:600;color:#1687ff;min-height:20px;margin:0 0 4px;text-align:right}
+label{display:block;font-size:13px;margin:8px 0 4px}
+input,textarea,select{width:100%;padding:12px;border:1px solid #cbd9d6;border-radius:9px;font:inherit;font-size:14px;margin:4px 0 10px;color:var(--ink);background:#fff}
+button{font:inherit;font-size:14px;border:0;border-radius:9px;padding:12px 14px;cursor:pointer}
+button:focus,input:focus{outline:2px solid #72b8ae;outline-offset:1px}
+.primary{background:var(--accent);color:#fff;width:100%;font-weight:bold}.primary:disabled{opacity:.55;cursor:not-allowed}.send-button{width:48px;height:48px;padding:0;border-radius:50%;font-size:25px;line-height:1;display:block;margin:8px 0 0 auto}
+.light{background:#edf4f2;border:1px solid #d4e2de;color:var(--green)}
+.options{display:flex;flex-wrap:wrap;gap:8px;margin:8px 0}
+.options button{flex:1 1 42%;background:#e7f4e4;border:1px solid #cce8c6;color:#174c42;min-height:44px}
+.row{display:flex;gap:8px}.row button{flex:1}
+.small{font-size:11px;color:var(--muted);line-height:1.8}
+.whatsapp{display:block;text-decoration:none;background:#25d366;color:#063b20;text-align:center;font-weight:bold;border-radius:10px;padding:14px;margin-top:8px}
+.success-line{display:block;margin-top:4px;font-size:12px;font-weight:normal;color:var(--accent)}
+.hidden{display:none!important}
+footer{text-align:center;padding:12px;border-top:1px solid #ded8cf;background:#f7f3ed;font-size:11px;color:#71849a}
+@media(max-width:480px){main{padding:10px}.bubble{max-width:100%;font-size:13px}header h1{font-size:15px}.status{display:none}}
+</style>
+</head>
+<body>
+<div class="app">
+<header><div class="avatar"><img src="asset-1.webp" alt="شعار صادق المرغمي"></div><div><h1>صادق المرغمي</h1><p>معك في كل سؤال</p></div><button type="button" class="admin-entry" onclick="openAdmin()">لوحة التحكم</button></header>
+<main>
+<img id="cover" alt="أهلًا بك، لنبدأ رحلتك خطوة بخطوة نحو فرصتك الجديدة" src="asset-1.png">
+<div class="intro" id="intro">أهلًا وسهلًا بك 🌹</div>
+<div id="chat" aria-live="polite"></div>
+<div id="action">
+<h2>أهلًا وسهلًا بك</h2>
+<p>أرسل رسالتك لبدء الحديث.</p>
+<button class="primary" onclick="begin()">أرغب بمعرفة تفاصيل فرصة العمل</button>
+</div>
+
+</main>
+<footer onclick="hiddenAdminTap()" title="">SADIQ AL-MARGHAMI</footer>
+</div>
+<script>
+const chat=document.getElementById('chat'), action=document.getElementById('action');
+const CATALOG_PDF_URL='asset-1.pdf';
+function openCatalogPDF(){const tab=window.open(CATALOG_PDF_URL,'_blank');if(!tab){const a=document.createElement('a');a.href=CATALOG_PDF_URL;a.download='كتالوجمنتجاتDXN.pdf';a.click();}}
+const data={name:'',birthYear:'',country:'',educationWork:'',workDetails:'',duration:'',wish:'',future:'',summary:'',interest:'',confidence:'',permission:'',send:'',appointment:'',time:'',correction:'',clarification:'',source:'',watched:''};
+let started=false;
+let appointmentTimer=null;
+const PROGRESS_KEY='sadiq_local_progress_v1';
+let progressMode='start',progressRestoring=false;
+let mediaProgress={current:[0,0,0],furthest:[0,0,0],completed:[false,false,false]};
+let adminUnlocked=false;
+let adminTaps=0, adminTapTimer=null;
+const STORE_KEY='sadiq_candidate_records_v1';
+const ADMIN_PASSWORD='SSDD544288ww';
+try{if(localStorage.getItem('sadiq_admin_password')==='2468')localStorage.setItem('sadiq_admin_password',ADMIN_PASSWORD);}catch(e){}
+const QUESTION_TITLES={permission:'الموافقة على متابعة الأسئلة',workDetails:'العمل الحالي',duration:'مدة العمل',wish:'ما الذي ترغب في تحسينه',future:'التفكير في المستقبل',summary:'تأكيد الفهم الأول',correction:'تصحيح الفهم',summary2:'تأكيد الفهم بعد التصحيح',interest:'مدى مناسبة الفرصة',confidence:'الثقة بالبدء',continue:'',send:'إرسال المواد التعريفية',customTime:'تحديد موعد متابعة',appointment:'موعد مشاهدة العرض',watched:'تأكيد مشاهدة العرض',ready:'الاستعداد للنقاش',liked:'ما لفت الانتباه',companyAge:'عمر الشركة',members:'عدد أعضاء الشركة',countries:'الدول التي تتواجد فيها الشركة',products:'معرفة المنتجات',global:'معنى الانتشار العالمي',persistence:'المثابرة تجاه كلام الناس',incomeType:'نوع الدخل المفضل',incomeGoal:'الطموح المالي',dailyTime:'الوقت اليومي المتاح',longTerm:'الاستعداد للتعلم طويل الأمد',training:'الاستعداد للتدريب'};
+const QUESTION_DEFAULTS={permission:'هل تسمح لي أن أسألك بعض الأسئلة البسيطة؟',workDetails:'هل أنت طالب أم موظف؟ وما هو عملك الحالي؟',duration:'ومنذ متى وأنت تعمل في هذا المجال؟',wish:'ما أكثر شيء تتمنى أن يتحسن في وضعك الحالي أو عملك؟',future:'ولو بقي وضعك كما هو اليوم خلال السنوات الخمس القادمة، هل ستكون راضيًا عن النتيجة؟',summary:'هل هذا صحيح؟',correction:'ما الذي تريد تصحيحه في فهمي لاحتياجك؟',summary2:'هل فهمت احتياجك بشكل صحيح؟',interest:'هل هذا هو ما تبحث عنه؟',confidence:'هل سيعطيك ذلك ثقة أكبر للبدء؟',continue:'هل ترغب في متابعة الخطوة التالية؟',send:'هل يناسبك أن أرسل لك المواد التعريفية؟',customTime:'متى يناسبك أن نتابع؟ اكتب الوقت الذي يناسبك.',appointment:'اكتب الوقت الذي يناسبك لمشاهدة العرض.',watched:'أخبرني عندما تنتهي من مشاهدة العرض.',ready:'هل أنت جاهز؟',liked:'من خلال مشاهدتك الفيديوهات السابقة، ما الشيء الذي لفت انتباهك واهتمامك وأعجبك؟',companyAge:'كم عمر الشركة، وماذا يعني لك هذا العمر؟',members:'كم عدد أعضاء الشركة، وماذا يعني لك هذا الرقم؟',countries:'في كم دولة تتواجد الشركة، وماذا يعني لك هذا الانتشار؟',products:'من خلال اطلاعك على كتالوج المنتجات، هل يمكنك ذكر عدد من المنتجات؟',global:'من منظور تجاري، ماذا تعني لك العضوية العالمية والفروع في دول متعددة والمنتجات المتنوعة؟',persistence:'هل أنت من الأشخاص الذين يتأثرون بكلام الناس ويتوقفون، أم أنك تصرّ على هدفك ولا تستسلم من أول محاولة؟',incomeType:'لو تم قبولك معنا، ماذا تفضّل: راتبًا ثابتًا أم نسبةً حسب الجهد والنتائج؟',incomeGoal:'ما طموحك المالي؟ كم تتمنى أن يكون دخلك الشهري؟',dailyTime:'هل تستطيع تخصيص ساعتين إلى ثلاث ساعات يوميًا على الأقل للتعلم والعمل؟',longTerm:'هل أنت مستعد للتعلم وبذل الجهد على مدى سنتين إلى ثلاث سنوات؟',training:'هل أنت مستعد للتدرب والتعلم وتنفيذ المهام اليومية واتباع إرشادات التدريب؟'};
+function getQuestionOverrides(){try{return JSON.parse(localStorage.getItem('sadiq_question_overrides')||'{}')}catch(e){return {}}}
+function renderQuestionEditor(){const ov=getQuestionOverrides();show('تعديل صياغة الأسئلة','',`<p class="small">غيّر نص السؤال الذي سيظهر للمشاركين. اترك الحقل فارغًا لإبقاء السؤال الأصلي. التغييرات محفوظة محليًا على هذا الجهاز.</p><div id="questionEditor">${Object.entries(QUESTION_DEFAULTS).map(([key,text])=>`<label for="q-${key}">${escapeHtml(key)}</label><textarea id="q-${key}" rows="2" placeholder="${escapeHtml(text)}">${escapeHtml(ov[key]||'')}</textarea>`).join('')}</div><button class="primary" onclick="saveQuestionEdits()">حفظ التعديلات</button><button class="light" style="width:100%;margin-top:8px" onclick="renderAdmin()">العودة للوحة التحكم</button>`);}
+function saveQuestionEdits(){const ov={};for(const key of Object.keys(QUESTION_DEFAULTS)){const v=document.getElementById('q-'+key).value.trim();if(v)ov[key]=v;}localStorage.setItem('sadiq_question_overrides',JSON.stringify(ov));alert('تم حفظ صياغة الأسئلة على هذا الجهاز.');renderQuestionEditor();}
+let currentRecord={id:Date.now(),startedAt:new Date().toISOString(),name:'',answers:[],status:'قيد المتابعة'};
+function normalizedMediaProgress(value){const fallback={current:[0,0,0],furthest:[0,0,0],completed:[false,false,false]};if(!value||typeof value!=='object')return fallback;for(let i=0;i<3;i++){fallback.current[i]=Math.max(0,Number(value.current?.[i])||0);fallback.furthest[i]=Math.max(0,Number(value.furthest?.[i])||0);fallback.completed[i]=Boolean(value.completed?.[i]);}return fallback;}
+function saveProgress(){if(progressRestoring||adminUnlocked)return;try{if(progressMode==='media'){action.querySelectorAll('video[data-required-video]').forEach((v,i)=>{if(Number.isFinite(v.currentTime)&&v.readyState>0)mediaProgress.current[i]=v.currentTime;});}const draft={answer:document.getElementById('answer')?.value||'',candidateName:document.getElementById('candidateName')?.value||'',candidatePlace:document.getElementById('candidatePlace')?.value||'',candidateWork:document.getElementById('candidateWork')?.value||''};const snapshot={version:1,started,mode:progressMode,data,currentRecord,chatHtml:chat.innerHTML,actionHtml:progressMode==='media'?'':action.innerHTML,mediaProgress,draft,savedAt:Date.now()};localStorage.setItem(PROGRESS_KEY,JSON.stringify(snapshot));}catch(e){}}
+function allVideosWatched(){return mediaProgress.completed.length===3&&mediaProgress.completed.every(Boolean);}
+function updateVideoAccess(){const videos=[...action.querySelectorAll('video[data-required-video]')];videos.forEach((v,i)=>{const allowed=i===0||mediaProgress.completed.slice(0,i).every(Boolean);v.controls=allowed;v.style.pointerEvents=allowed?'auto':'none';v.style.opacity=allowed?'1':'.55';v.setAttribute('aria-disabled',allowed?'false':'true');if(!allowed)v.pause();});const all=allVideosWatched();const box=document.getElementById('answer'),button=document.getElementById('watched-submit'),note=document.getElementById('mandatory-watch-status');if(box)box.disabled=!all;if(button)button.disabled=!all;if(note)note.textContent=all?'اكتملت مشاهدة المقاطع الثلاثة. يمكنك المتابعة الآن.':`المشاهدة إلزامية بالترتيب: أكمل الفيديو ${mediaProgress.completed.findIndex(x=>!x)+1} من 3 للمتابعة.`;if(all)document.getElementById('videoWatchError')?.remove();}
+function initializeRequiredVideos(){const videos=[...action.querySelectorAll('video[data-required-video]')];mediaProgress=normalizedMediaProgress(mediaProgress);videos.forEach((v,i)=>{const updatePosition=()=>{if(!v.seeking){if(!v.paused&&!mediaProgress.completed[i])mediaProgress.furthest[i]=Math.max(mediaProgress.furthest[i],v.currentTime);mediaProgress.current[i]=v.currentTime;}const now=Date.now();if(now-(v._lastProgressSave||0)>900){v._lastProgressSave=now;saveProgress();}};v.addEventListener('loadedmetadata',()=>{const duration=Number.isFinite(v.duration)?v.duration:0;const target=Math.min(mediaProgress.current[i]||0,mediaProgress.completed[i]?(duration||0):(mediaProgress.furthest[i]||0),duration||0);if(target>0)try{v.currentTime=target;}catch(e){}updateVideoAccess();saveProgress();},{once:true});v.addEventListener('seeking',()=>{if(!mediaProgress.completed[i]&&v.currentTime>mediaProgress.furthest[i]+0.4){const max=Math.max(0,mediaProgress.furthest[i]);try{v.currentTime=max;}catch(e){}}});v.addEventListener('seeked',()=>{if(!mediaProgress.completed[i]&&v.currentTime>mediaProgress.furthest[i]+0.4){mediaProgress.current[i]=mediaProgress.furthest[i];try{v.currentTime=mediaProgress.furthest[i];}catch(e){}saveProgress();return;}mediaProgress.current[i]=v.currentTime;saveProgress();});v.addEventListener('timeupdate',updatePosition);v.addEventListener('ended',()=>{mediaProgress.completed[i]=true;mediaProgress.current[i]=v.duration;mediaProgress.furthest[i]=v.duration;updateVideoAccess();saveProgress();});v.addEventListener('play',()=>{const allowed=i===0||mediaProgress.completed.slice(0,i).every(Boolean);if(!allowed)v.pause();});});updateVideoAccess();}
+function bindProgressDrafts(){
+ ['answer','candidateName','candidatePlace','candidateWork'].forEach(id=>{const el=document.getElementById(id);if(el)el.addEventListener('input',saveProgress);});
+ const input=document.getElementById('answer'),indicator=document.getElementById('typingIndicator');
+ if(input&&indicator){let typingTimer;const updateTyping=()=>{clearTimeout(typingTimer);if(input.value.trim()){indicator.classList.remove('hidden');typingTimer=setTimeout(()=>indicator.classList.add('hidden'),1100);}else indicator.classList.add('hidden');};input.oninput=updateTyping;updateTyping();}
+}
+function restoreProgress(){let saved;try{saved=JSON.parse(localStorage.getItem(PROGRESS_KEY)||'null');}catch(e){return false;}if(!saved||!saved.started||saved.mode==='start')return false;progressRestoring=true;try{Object.assign(data,saved.data||{});if(saved.currentRecord)currentRecord=saved.currentRecord;started=true;progressMode=saved.mode||'question';mediaProgress=normalizedMediaProgress(saved.mediaProgress);chat.innerHTML=saved.chatHtml||'';if(progressMode==='media'){showMedia(true);}else{action.innerHTML=saved.actionHtml||'';}const d=saved.draft||{};for(const [id,key] of [['answer','answer'],['candidateName','candidateName'],['candidatePlace','candidatePlace'],['candidateWork','candidateWork']]){const el=document.getElementById(id);if(el&&typeof d[key]==='string')el.value=d[key];}bindProgressDrafts();}catch(e){progressRestoring=false;return false;}progressRestoring=false;if(progressMode==='waiting')checkPendingAppointment();saveProgress();return true;}
+window.addEventListener('pagehide',saveProgress);document.addEventListener('visibilitychange',()=>{if(document.visibilityState==='hidden')saveProgress();else if(progressMode==='waiting')checkPendingAppointment();});
+
+function persistRecord(){try{const rows=JSON.parse(localStorage.getItem(STORE_KEY)||'[]');const i=rows.findIndex(r=>r.id===currentRecord.id);if(i>=0)rows[i]=JSON.parse(JSON.stringify(currentRecord));else rows.unshift(JSON.parse(JSON.stringify(currentRecord)));localStorage.setItem(STORE_KEY,JSON.stringify(rows));}catch(e){}}
+function recordAnswer(question,answer){currentRecord.answers.push({question,answer,at:new Date().toISOString()});persistRecord();}
+function normalizeForValidation(value){return String(value??'').normalize('NFKD').replace(/[\u064B-\u065F\u0670\u0640]/g,'').toLowerCase().replace(/[أإآٱ]/g,'ا').replace(/ى/g,'ي').replace(/[\u200e\u200f]/g,'').trim();}
+function validateNaturalAnswer(key,value){
+ if(key==='interest'||key==='duration'||key==='appointment'||key==='customTime'||key==='products'||key==='salaryDirection')return String(value||'').trim().length>0;
+ if(key==='incomeType'&&isBusinessPreference(value))return true;
+ const s=normalizeForValidation(value), compact=s.replace(/[\s.,،؛:!?؟؛()\[\]{}"'`~@#$%^&*_+=<>\/\\|-]/g,'');
+ if(!compact||(/^(.)\1+$/.test(compact)&&!(key==='companyAge'&&/^[0-9٠-٩۰-۹]+$/.test(compact))))return false;
+ const numericKeys=['incomeGoal','companyAge','countries','members'];
+ const hasLetters=/[a-z\u0600-\u06ff]/i.test(s),hasNumber=/[0-9٠-٩۰-۹]/.test(s);
+ if(!hasLetters&&!numericKeys.includes(key))return false;
+ const tokens=s.match(/[a-z\u0600-\u06ff0-9٠-٩۰-۹]+/gi)||[];
+ const words=tokens.filter(t=>/[a-z\u0600-\u06ff]/i.test(t));
+ if(words.some(w=>w.length===1)&&words.filter(w=>w.length>1).length===0&&!numericKeys.includes(key))return false;
+ const yes=/^(نعم|اي|ايوه|أيوه|اه|اجل|أجل|موافق|موافقة|تمام|اكيد|أكيد|بالتأكيد|مستعد|مستعدة|نعم بالتأكيد|yes|yeah|ok|okay)$/i;
+ const no=/^(لا|كلا|مش|ما اقدر|ما أقدر|غير موافق|غير موافقة|لست مستعد|لست مستعدة|no|nope)$/i;
+ const yesNo=/نعم|ايوه|أيوه|موافق|موافقة|تمام|أكيد|اكيد|مستعد|مستعدة|لا|كلا|مش|غير موافق|غير موافقة|yes|no/i;
+ const timeWord=/الان|الآن|اليوم|غدا|غداً|بكره|بكرة|بعد|ساعة|ساعه|صباح|مساء|الليل|المساء|الصباح|اسبوع|أسبوع|يوم|موعد|الساعه|الساعة|\d{1,2}[:.]\d{2}|\d{1,2}\s*(صباح|مساء|am|pm)/i;
+ const work=/طالب|طالبه|دراس|مدرس|موظف|موظفه|عامل|عاملة|عمل|اعمل|أعمل|اشتغل|أشتغل|صاحب|صاحبة|تاجر|تجاره|تجارة|مشروع|مهن|عاطل|باحث عن عمل|بدون عمل|لا اعمل|لا أعمل|ربة بيت|ربة منزل|متقاعد|متقاعد|وظيف|ابحث عن|أبحث عن|اريد العمل|اريد ان اعمل|أريد أن أعمل/i;
+ const broad=/انا|أنا|عندي|لدي|اريد|أريد|احتاج|أحتاج|اتمنى|أتمنى|اطمح|أطمح|احب|أحب|افضل|أفضل|ارغب|أرغب|اشوف|أشوف|اعتقد|أعتقد|لأن|لان|لكن|وضع|حالي|مستقبل|دخل|راتب|مال|اسره|أسرة|اهل|أهل|وقت|عمل|فرص|فرصة|نجاح|تعلم|تدريب|مشروع|منتج|منتجات|شرك|تسويق|بيع|تجاره|تجارة|خبره|خبرة|هدف|اهداف|أهداف|تحسن|افضل|أفضل|راضي|راض|مناسب|استطيع|أستطيع|اقدر|أقدر|ممكن|غير|صحيح|خطا|خطأ|تصحيح|اقصد|أقصد|لان|لأن|النسبه|النسبة|عموله|عمولة|ثابت|جهد|نتائج|دوله|دولة|اعضاء|أعضاء|عدد|كبير|كثير|فروع|عالمي|عالمية|انتشار|تتواجد|يوجد|اعرف|أعرف|لفت|اعجب|أعجب|جذب|قصة|فيديو|عرض|معلومة|معلومه|منتج|استفسار|سؤال|جاهز|انتهيت|شاهدت|مشاهدة|اتعلم|أتعلم|مستعد|مستعدة/i;
+ const meaningful=words.filter(w=>w.length>1&&!/^(انا|أنا|و|في|من|على|الى|إلى|عن|مع|هو|هي|هذا|هذه|كان|كانت|ثم|لكن|ان|أن|اذا|إذا|ما|هل|قد|لقد)$/i.test(w));
+ // Catch keyboard noise and isolated random strings while retaining clear short answers.
+ const known=/نعم|ايوه|أيوه|لا|طالب|طالبه|موظف|موظفه|عامل|عاملة|صاحب|عمل|اعمل|أعمل|اشتغل|أشتغل|عاطل|باحث|بدون|ربة|منزل|متقاعد|دراس|نسبه|نسبة|راتب|عموله|عمولة|ربع|قرن|خمسه|خمسة|عشرون|عشرين|25|180|مئه|مئة|مائه|مائة|دخل|منتج|منتجات|شركه|شركة|فكره|فكرة|تسويق|بيع|ساعه|ساعة|يوم|شهر|سنه|سنة|عام|اسبوع|أسبوع|الان|الآن|غدا|غداً|بكره|بكرة|مستعد|مستعدة|موافق|تمام|صحيح|خطا|خطأ|هدف|اهداف|أهداف|استطيع|أستطيع|اقدر|أقدر|مناسب|احتاج|أحتاج|اريد|أريد|اتمنى|أتمنى|اسره|أسرة|تعلم|تدريب|جهد|نتائج|قصة|عرض|فروع|دوله|دولة|اعضاء|أعضاء|فيديو|معلومه|معلومة|مهتم|المنتج|المرونة|النجاح|المبيعات|التجاره|التجارة|الوقت|فرصة|المشروع|الأسرة|الاسرة|العمل/i;
+ if(!meaningful.length&&!hasNumber)return false;
+ if(meaningful.length===1&&meaningful[0].length>=6&&!known.test(meaningful[0]))return false;
+ if(meaningful.length>0&&meaningful.every(w=>w.length>=6)&&!known.test(s))return false;
+ const categories={
+  permission:()=>yesNo.test(s), workDetails:()=>work.test(s), duration:()=>/منذ|مده|مدة|سنه|سنة|سنين|عام|شهر|اسبوع|أسبوع|يوم|\d|عامين|سنتين|اشهر|أشهر/i.test(s),
+  wish:()=>/اتمنى|أتمنى|اريد|أريد|اطمح|أطمح|احتاج|أحتاج|تحسن|دخل|راتب|مال|وظيف|عمل|فرص|فرصة|اسره|أسرة|صحة|تعليم|دراسه|دراسة|سكن|ديون|مستقبل|استقرار|وقت|نجاح|هدف|مشروع/i.test(s),
+  future:()=>yesNo.test(s)||/راضي|راض|مستقبل|يتحسن|تحسن|لا اريد|لا أريد|اتمنى|أتمنى|افضل|أفضل|صعب|مبسوط|سعيد/i.test(s),
+  summary:()=>yesNo.test(s)||/صحيح|خطا|خطأ|اقصد|أقصد|تصحيح|احتياج|مناسب|غير صحيح/i.test(s),
+  correction:()=>meaningful.length>=2&&(/دخل|راتب|مال|عمل|وظيف|اسره|أسرة|هدفي|احتاج|أحتاج|اريد|أريد|اقصد|أقصد|أطمح|اتمنى|أتمنى|وقت|تعليم|دراسه|دراسة|سكن|صحة|فرصة|مشروع/i.test(s)||broad.test(s)),
+  summary2:()=>yesNo.test(s)||/صحيح|خطا|خطأ|اقصد|أقصد|تصحيح|احتياج|مناسب|غير صحيح/i.test(s),
+  interest:()=>yesNo.test(s)||/ابحث|أبحث|مناسب|فرص|فرصة|مشروع|عمل|دخل|اضافي|إضافي|وظيف|اريد|أريد|لا ابحث|لا أبحث/i.test(s),
+  confidence:()=>true,
+  continue:()=>yesNo.test(s)||/اكمل|أكمل|تابع|متابع|استمر|أستمر|لاحقا|لاحقًا|بعد|موافق/i.test(s),
+  send:()=>yesNo.test(s)||/ارسل|أرسل|ارسلي|أرسلي|مواد|فيديو|الان|الآن|لاحقا|لاحقًا|بعد/i.test(s),
+  customTime:()=>timeWord.test(s), appointment:()=>timeWord.test(s),
+  watched:()=>yesNo.test(s)||/شاهد|انته|خلص|تمت|جاهز|جاهزة|باقي|لم اشاهد|لم أشاهد|ما شاهدت/i.test(s),
+  ready:()=>yesNo.test(s)||/جاهز|جاهزة|مستعد|مستعدة|ابدأ|أبدأ/i.test(s),
+  liked:()=>/لفت|اعجب|أعجب|جذب|فكره|فكرة|مشروع|تسويق|بيع|منتج|منتجات|دخل|نجاح|قصه|قصة|تدريب|تعلم|تعليم|مرونه|مرونة|حرية|حريه|رأس مال|راس مال|رأس المال|راس المال|تكلف|جودة|ممتاز|روعة|وقت|منزل|بيت|انتشار|شركه|شركة|المبيعات|عجبني|أعجبني|استفدت|اعجبني/i.test(s),
+  companyAge:()=>hasNumber||/ربع\s*قرن|25|خمسه وعشرون|خمسة وعشرون|عشرين وخمس|خمسة وعشرين/i.test(s),
+  members:()=>hasNumber||/عضو|اعضاء|أعضاء|عضوية|شركه|شركة|كبير|كثير|انتشار|ثقه|ثقة|فرص|قوه|قوة|خبره|خبرة/i.test(s),
+  countries:()=>/180|ميه وثمانين|مية وثمانين|مايه وثمانين|ماية وثمانين|ميه وثمانون|مية وثمانون|مايه وثمانون|ماية وثمانون|مئه وثمانين|مئة وثمانين|مائه وثمانين|مائة وثمانين|مئه وثمانون|مئة وثمانون|مائة وثمانون/i.test(s),
+  products:()=>/منتج|منتجات|عطر|عطور|شامبو|صابون|كريم|كريمات|معجون|مكمل|فيتامين|منظف|مكياج|غذاء|مشروب|كتالوج|المنتج/i.test(s),
+  global:()=>/تجاره|تجارة|سوق|اسواق|أسواق|فروع|عالمي|عالميه|عالمية|انتشار|اعضاء|أعضاء|عضويه|عضوية|منتجات|فرص|توسع|مبيعات|دول|دوله|دولة|نمو|قوه|قوة|ثقه|ثقة|علامه|علامة/i.test(s),
+  persistence:()=>yesNo.test(s)||/اصر|أصر|استسلم|أستسلم|هدف|اهداف|أهداف|مثابر|اصرار|إصرار|استمر|أستمر|كلام الناس|اتأثر|أتأثر|يتوقف|طموح|مستمر/i.test(s),
+  incomeType:()=>/راتب|ثابت|معاش|مرتب|وظيف|نسبه|نسبة|عموله|عمولة|جهد|نتائج|البيع|المبيعات|دخل|حر|اضاف|محدود|حدود|مشروع|اعمال/i.test(s)||isBusinessPreference(s),
+  businessReady:()=>/نعم|ايوه|اجل|موافق|مستعد|جاهز|ممتاز|حلو|جيد|رائع|جميل|تمام|اكيد|ابدأ|ابدا|توكلنا|ان شاء الله|باذن الله|انطلق|متحمس/i.test(s),
+  incomeGoal:()=>/[0-9]/.test(s), dailyTime:()=>yesNo.test(s)||/ساعتين|ثلاث|ساعه|ساعة|ساعات|وقت|يوم|اقدر|أقدر|استطيع|أستطيع|نعم|لا/i.test(s),
+  longTerm:()=>yesNo.test(s)||/سنتين|ثلاث|سنوات|تعلم|جهد|مستعد|مستعدة|استعداد|جاهز|جاهزة/i.test(s),
+  training:()=>yesNo.test(s)||/تدرب|تدريب|تعلم|تنفيذ|مهام|مستعد|مستعدة|جاهز|جاهزة|اتباع|ارشادات|إرشادات/i.test(s),
+  productsPromise:()=>yesNo.test(s)||/استطيع|أستطيع|اقدر|أقدر|تجرب|تجربة|موافق|موافقة|حسب استطاع|دون ضغط|لا اوافق|لا أوافق/i.test(s),
+  questions:()=>meaningful.length>=2&&/سؤال|استفسار|متى|كيف|ما هي|ماهو|كم|منتج|سعر|عمل|تسجيل|تدريب|اريد|أريد|اعرف|أعرف/i.test(s)
+ };
+ if(categories[key])return Boolean(categories[key]());
+ return meaningful.length>=2&&(broad.test(s)||meaningful.length>=4);
+}
+function hiddenAdminTap(){adminTaps++;clearTimeout(adminTapTimer);adminTapTimer=setTimeout(()=>adminTaps=0,1800);if(adminTaps>=5){adminTaps=0;openAdmin();}}
+function openAdmin(){const pw=prompt('لوحة الإدارة الخاصة — أدخل كلمة المرور');if(pw===null)return;const saved=localStorage.getItem('sadiq_admin_password')||ADMIN_PASSWORD;if(pw!==saved){alert('كلمة المرور غير صحيحة');return;}adminUnlocked=true;renderAdmin();enableBubbleEditing();}
+function renderAdmin(){const rows=JSON.parse(localStorage.getItem(STORE_KEY)||'[]');show('لوحة الإدارة الداخلية','',`<p class="small">هذه السجلات محفوظة في هذا المتصفح والجهاز فقط، وليست قاعدة بيانات مشتركة عبر الإنترنت. الإجابات المفتوحة تحتاج إلى حكمك؛ ويظهر تقييم تلقائي فقط للأسئلة ذات المعلومة المحددة في نص الروبوت.</p><button class="light" onclick="renderQuestionEditor()">تعديل صياغة الأسئلة</button><button class="light" onclick="changeAdminPassword()">تغيير كلمة المرور</button><button class="light" onclick="exportRecords()">تصدير البيانات JSON</button><button class="light" onclick="showAdminRecords()">تحديث السجلات (${rows.length})</button><div id="adminRows"></div><button class="primary" onclick="restart()">العودة للمحادثة</button>`);showAdminRecords();}
+function expectedAnswer(question,answer){const q=String(question||''),a=String(answer||'');if(/كم عمر الشركة/.test(q))return /ربع\s*قرن|25\s*عام|خمسة وعشرون/i.test(a)?'متوافقة مع المعلومة المعتمدة (25 عامًا)':'غير متوافقة مع المعلومة المعتمدة (25 عامًا)';if(/في كم دولة/.test(q))return /180|مئة وثمانين|مائة وثمانين|مئة وثمانون|مائة وثمانون/i.test(a)?'متوافقة مع المعلومة المعتمدة (180 دولة)':'غير متوافقة مع المعلومة المعتمدة (180 دولة)';return 'تحتاج إلى مراجعة يدوية — إجابة مفتوحة';}
+function setAnswerReview(recordId,index,value){const rows=JSON.parse(localStorage.getItem(STORE_KEY)||'[]');const r=rows.find(x=>String(x.id)===String(recordId));if(!r||!r.answers||!r.answers[index])return;r.answers[index].review=value;localStorage.setItem(STORE_KEY,JSON.stringify(rows));showAdminRecords();}
+function showAdminRecords(){const host=document.getElementById('adminRows');if(!host)return;const rows=JSON.parse(localStorage.getItem(STORE_KEY)||'[]');host.innerHTML=rows.length?rows.map(r=>`<details style=\"background:#fff;border:1px solid #ddd;border-radius:12px;padding:12px;margin:10px 0\"><summary><b>${escapeHtml(r.name||'مرشح دون اسم')}</b> — ${escapeHtml(r.status||'قيد المتابعة')} (${(r.answers||[]).length} إجابة)</summary><p class=\"small\">بدأ: ${escapeHtml(r.startedAt||'')}<br>ملاحظة: السجلات محفوظة على هذا الجهاز فقط.</p>${(r.answers||[]).map((a,i)=>{const auto=expectedAnswer(a.question,a.answer);return `<div style=\"border-top:1px solid #eee;padding:8px 0\"><b>${escapeHtml(a.question)}</b><br><span>${escapeHtml(a.answer)}</span><p class=\"small\">التقييم: ${escapeHtml(a.review||auto)}</p><div class=\"row\"><button type=\"button\" class=\"light\" onclick=\"setAnswerReview('${String(r.id).replace(/'/g,'')}',${i},'صحيح')\">تحديد صحيح</button><button type=\"button\" class=\"light\" onclick=\"setAnswerReview('${String(r.id).replace(/'/g,'')}',${i},'غير صحيح')\">تحديد غير صحيح</button><button type=\"button\" class=\"light\" onclick=\"setAnswerReview('${String(r.id).replace(/'/g,'')}',${i},'مراجعة يدوية')\">مراجعة يدوية</button></div></div>`}).join('')}</details>`).join(''):'<p>لا توجد إجابات محفوظة على هذا الجهاز حتى الآن.</p>'; }
+function escapeHtml(v){return String(v??'').replace(/[&<>\"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','\"':'&quot;',"'":'&#39;'}[c]));}
+function changeAdminPassword(){const p=prompt('أدخل كلمة مرور جديدة (4 أحرف/أرقام على الأقل)');if(!p)return;if(p.length<4){alert('اجعل كلمة المرور 4 أحرف أو أكثر');return;}localStorage.setItem('sadiq_admin_password',p);alert('تم تغيير كلمة المرور على هذا الجهاز.');}
+function exportRecords(){const rows=localStorage.getItem(STORE_KEY)||'[]';const blob=new Blob([rows],{type:'application/json'});const a=document.createElement('a');a.href=URL.createObjectURL(blob);a.download='candidate-records.json';a.click();URL.revokeObjectURL(a.href);}
+
+function getBubbleEdits(){try{return JSON.parse(localStorage.getItem('sadiq_bubble_edits')||'{}')}catch(e){return {}}}
+function editBotBubble(original,b){const edits=getBubbleEdits(),old=edits[original]||{text:original,extra:''};const updated=prompt('عدّل نص هذه الرسالة. احذف النص إن أردت إخفاءه:',old.text);if(updated===null)return;const extra=prompt('أضف كلمات أخرى إلى المربع نفسه (اتركه فارغًا إن لم تحتج):',old.extra||'');if(extra===null)return;edits[original]={text:updated,extra};localStorage.setItem('sadiq_bubble_edits',JSON.stringify(edits));const t=b.querySelector('.bubble-text');if(t)t.textContent=[updated,extra].filter(Boolean).join('\n');}
+function addBubbleEditButton(b){if(!adminUnlocked||b.querySelector('.bubble-edit'))return;const original=b.dataset.originalText||'';const button=document.createElement('button');button.type='button';button.className='bubble-edit light';button.textContent='تعديل هذه الرسالة';button.style.cssText='font-size:11px;padding:6px 9px;margin-top:7px';button.onclick=()=>editBotBubble(original,b);b.appendChild(button);}
+function enableBubbleEditing(){document.querySelectorAll('.bubble.bot').forEach(addBubbleEditButton);}
+function addBubble(text,who='bot',sender=who==='bot'?'صادق المرغمي':'أنت'){
+ const original=String(text??'');let shown=original;if(who==='bot'){const edits=getBubbleEdits()[original];if(edits)shown=[edits.text,edits.extra].filter(Boolean).join('\n');}
+ const b=document.createElement('div');b.className='bubble '+who;b.dataset.originalText=original;const s=document.createElement('div');s.className='sender';s.textContent=sender;b.appendChild(s);const t=document.createElement('div');t.className='bubble-text';t.textContent=shown;b.appendChild(t);if(who==='bot')addBubbleEditButton(b);chat.appendChild(b);setTimeout(()=>b.scrollIntoView({behavior:'smooth',block:'nearest'}),30);if(!adminUnlocked)saveProgress();
+}
+function show(title,desc,body){action.innerHTML=`${title?`<h2>${title}</h2>`:''}${body}`;if(progressMode!=='media')saveProgress();}
+function ask(title,question,key,placeholder='اكتب إجابتك هنا'){
+ const overrides=getQuestionOverrides();const actualQuestion=overrides[key]||question;progressMode='question';
+ const displayTitle=/^السؤال(?:\s|$)/.test(title)?'':title;
+ if(actualQuestion)addBubble(actualQuestion);currentRecord.lastQuestion=actualQuestion||title;persistRecord();show(displayTitle,'',`<div id="typingIndicator" class="typing-indicator hidden" aria-live="polite">جاري الكتابة</div><form onsubmit="submitAnswer('${key}');return false"><textarea id="answer" rows="3" required aria-label="الإجابة" inputmode="${key==='companyAge'?'numeric':'text'}" placeholder="${key==='companyAge'?'اكتب العمر بالأرقام فقط، مثل 27':placeholder}"></textarea><button class="primary send-button" type="submit" aria-label="إرسال" title="إرسال">➤</button></form>`);bindProgressDrafts();saveProgress();
+}
+function begin(){if(started)return;started=true;progressMode='intake';mediaProgress={current:[0,0,0],furthest:[0,0,0],completed:[false,false,false]};addBubble('أرغب بمعرفة تفاصيل فرصة العمل','user','أنت');addBubble('أهلًا وسهلًا بك أخي الكريم 🌹\nمعك المدرب ورائد الأعمال صادق المرغمي، ويسعدني اهتمامك بالتعرّف على تفاصيل فكرة العمل.\nسأوضح لك الفكرة بكل بساطة وشفافية، ودون أي التزام عليك. ولكي أتعرف عليك وأعرف هل الفكرة مناسبة لك، أرسل لي:\n🔹 الاسم\n🔹 الدولة والمحافظة\n🔹 المستوى الدراسي أو العمل الحالي\n\nلا تحتاج لكتابة تفاصيل كثيرة، فقط هذه المعلومات البسيطة تساعدني على توجيهك بالشكل المناسب.\n📌 فضلًا احفظ رقمي باسم المدرب صادق المرغمي 📲 حتى تتمكن من تمييز رسائلي بسهولة وسط كثرة المحادثات.\n✅ وسأتابع معك الخطوة التالية.\nيسعدني التعرّف عليك 🌹');
+ show('معلومات التعارف', '', `<form id="intakeForm" onsubmit="submitIntake(event)"><label for="candidateName">الاسم</label><input id="candidateName" required minlength="2" maxlength="70" pattern="[^0-9]+" placeholder="الاسم الكامل"><label for="candidatePlace">الدولة والمحافظة</label><input id="candidatePlace" required minlength="3" maxlength="100" placeholder="اليمن، صنعاء"><label for="candidateWork">المستوى الدراسي أو العمل الحالي</label><input id="candidateWork" required minlength="2" maxlength="120" placeholder="طالب، موظف، ربة بيت، أبحث عن عمل"><button class="primary" type="submit">إرسال المعلومات والمتابعة</button></form>`);bindProgressDrafts();saveProgress();
+}
+function submitIntake(e){e.preventDefault();currentRecord={id:Date.now(),startedAt:new Date().toISOString(),name:'',answers:[],status:'قيد المتابعة'};const name=document.getElementById('candidateName').value.trim(),place=document.getElementById('candidatePlace').value.trim(),work=document.getElementById('candidateWork').value.trim();if(name.length<2||place.length<3||work.length<2){alert('يرجى إدخال الاسم والدولة والمحافظة والمستوى الدراسي أو العمل الحالي بصورة صحيحة.');return;}data.name=name;currentRecord.name=name;data.birthYear='';data.country=place;data.educationWork=work;recordAnswer('بيانات التعارف',`الاسم: ${name}؛ الدولة والمحافظة: ${place}؛ المستوى الدراسي أو العمل الحالي: ${work}`);addBubble(`الاسم: ${name}\nالدولة والمحافظة: ${place}\nالمستوى الدراسي أو العمل الحالي: ${work}`,'user','أنت');addBubble(`أخي ${name}، إذا تسمح لي سوف أسألك بعض الأسئلة البسيطة.`);ask('','', 'permission','اكتب ردك هنا');}
+function honorific(){return /أخت|أستاذة|سيدة|ربة منزل|طالبة/i.test(data.name+' '+data.educationWork)?'أستاذة':'أستاذ';}
+function submitAnswer(key){const el=document.getElementById('answer');if(!el)return;const val=el.value.trim();if(key==='watched'&&!allVideosWatched()){if(!document.getElementById('videoWatchError')){addBubble('يجب مشاهدة الفيديوهات الثلاثة كاملة وبالترتيب قبل المتابعة.');chat.lastElementChild.id='videoWatchError';}el.focus();return;}if(!val){el.focus();return;}if(!validateNaturalAnswer(key,val)){if(!Array.from(document.querySelectorAll('.validation-error')).some(b=>b.dataset.questionKey===key)){addBubble('عذرًا، لم أتمكن من فهم إجابتك. نرجو كتابة إجابة واضحة عن السؤال حتى نتمكن من المتابعة.');const warning=chat.lastElementChild;warning.classList.add('validation-error');warning.dataset.questionKey=key;}el.focus();return;}Array.from(document.querySelectorAll('.validation-error')).filter(b=>b.dataset.questionKey===key).forEach(b=>b.remove());data[key]=val;recordAnswer(currentRecord.lastQuestion||key,val);addBubble(val,'user','أنت');next(key,val);}
+function getProfile(answerOverride=''){
+ const answer=(answerOverride||data.workDetails||'').toLowerCase();
+ const s=(data.educationWork+' '+answer).toLowerCase();
+ // Use the direct answer first so older intake text cannot override it.
+ if(/ربة\s*(بيت|منزل)|ربّة\s*(بيت|منزل)|ربة منزل|ربة بيت|أم\s*(ومتفرغة|متفرغ)|اعمال المنزل|أعمال المنزل/.test(answer))return 'homemaker';
+ if(/عامل|عاملة|اشتغل|أشتغل/.test(answer))return 'worker';
+ if(/موظف|موظفة|أعمل|اعمل|دوام|مدير|مهنة|عمل حالي/.test(answer))return 'employee';
+ if(/طالب|طالبة|جامع|جامعة|مدرس|مدرسة|دراس|كلية|معهد/.test(answer))return 'student';
+ if(/باحث عن عمل|أبحث عن عمل|ابحث عن عمل|عاطل|بدون عمل|لا أعمل|لا اعمل|متفرغ|متفرغة/.test(answer))return 'seeker';
+ if(/ربة\s*(بيت|منزل)|ربّة\s*(بيت|منزل)|ربة منزل|ربة بيت/.test(s))return 'homemaker';
+ if(/عامل|عاملة|اشتغل|أشتغل/.test(s))return 'worker';
+ if(/موظف|موظفة|أعمل|اعمل|دوام|مدير|مهنة|عمل حالي/.test(s))return 'employee';
+ if(/طالب|طالبة|جامع|جامعة|مدرس|مدرسة|دراس|كلية|معهد/.test(s))return 'student';
+ if(/باحث عن عمل|أبحث عن عمل|ابحث عن عمل|عاطل|بدون عمل|لا أعمل|لا اعمل|متفرغ|متفرغة/.test(s))return 'seeker';
+ return 'other';
+}
+function profileReply(profile=getProfile()){
+ const p=profile;
+ if(p==='student')return 'فهمت أنك طالب جامعي وتبحث عن فرصة مناسبة تساعدك على تطوير مهاراتك وزيادة دخلك، ويمكنك البدء بها بجانب دراستك.';
+ if(p==='employee')return 'فهمت أنك موظف وتبحث عن فرصة إضافية تساعدك على زيادة دخلك وتطوير مهاراتك، مع الاستمرار في عملك الحالي.';
+ if(p==='worker')return 'فهمت أنك تعمل كعامل، وتبحث عن فرصة إضافية تساعدك على زيادة دخلك وتطوير مهاراتك، مع الاستمرار في عملك الحالي.';
+ if(p==='homemaker')return 'فهمت أنك ربة منزل، وتبحثين عن فرصة مرنة تناسب مسؤولياتك ووقتك. إذا ناسبتك، يمكنك التعرف عليها والبدء تدريجيًا من المنزل، دون ضغط أو إلزام.';
+ if(p==='seeker')return 'فهمت أنك تبحث عن عمل أو فرصة مناسبة، وتريد استثمار وقتك في تطوير مهاراتك. سأوضح لك التفاصيل خطوة بخطوة حتى تقيّم مدى مناسبتها لك.';
+ return 'فهمت وضعك الحالي كما أوضحته، وسأشرح لك الفرصة بطريقة تناسب ظروفك وأهدافك، دون افتراض أنها مناسبة لك قبل أن تتعرف على تفاصيلها.';
+}
+function goalContext(){
+ const p=data.profile||getProfile();
+ if(p==='student')return 'فرصة تستطيع البدء بها بجانب دراستك، وبشكل تدريجي دون أن تؤثر على التزاماتك الدراسية';
+ if(p==='employee')return 'فرصة تستطيع البدء بها بجانب عملك الحالي، وبشكل تدريجي دون الحاجة إلى ترك وظيفتك';
+ if(p==='worker')return 'فرصة تستطيع البدء بها بجانب عملك الحالي، وبشكل تدريجي دون الحاجة إلى ترك عملك الحالي';
+ if(p==='homemaker')return 'فرصة مرنة تساعدك على تطوير مهاراتك وتحقيق دخل إضافي من المنزل، بما يناسب وقتك ومسؤولياتك';
+ if(p==='seeker')return 'فرصة تساعدك على اكتساب مهارات وخبرة وبناء مصدر دخل تدريجيًا، مع توضيح أن النتائج تختلف ولا يوجد دخل مضمون';
+ return 'فرصة تناسب وضعك الحالي وتساعدك على تحقيق أهدافك، بعد أن تتعرف على تفاصيلها';
+}
+function replyToLiked(answer){
+ const t=answer.toLowerCase();
+ if(/حرية|حريه|مرون|الوقت|وقتي|تنظيم الوقت|من المنزل|من البيت|دوام/.test(t)){
+  addBubble('جميل، واضح أن مرونة العمل وتنظيم الوقت هما أكثر ما لفت انتباهك. هذه المرونة قد تساعدك على ترتيب العمل بما يناسب ظروفك، مع اختلاف النتائج حسب الجهد والوقت.');
+ }else if(/راس مال|رأس مال|رأس المال|راس المال|بدون مال|دون مال|تكلف|مبلغ بسيط|استثمار/.test(t)){
+  addBubble('شكرًا لتوضيح ما لفت انتباهك. من المهم أن تتعرف على متطلبات البداية والتكاليف الفعلية قبل اتخاذ أي قرار، وألا تفترض أن العمل بلا تكلفة إلا بعد التأكد من التفاصيل.');
+ }else if(/منتج|منتجات|جود|ممتاز|ممتازه|رائع|روعة|كتالوج/.test(t)){
+  addBubble('جميل، يبدو أن المنتجات وجودتها لفتت انتباهك. من المهم الاطلاع على تفاصيل المنتجات ومكوناتها وأسعارها بنفسك، وتكوين رأيك بعد معرفتها.');
+ }else if(/تدريب|متابع|تعلم|تعليم|خطوه|خطوة|دعم|فريق/.test(t)){
+  addBubble('جميل، لفت انتباهك جانب التدريب والمتابعة. من المفيد أن تعرف كيف يتم التدريب وما نوع الدعم المتاح قبل أن تقرر المتابعة.');
+ }else if(/قصه|قصة|نجاح|شخص|تجرب|نتائج|دخل|ارباح|أرباح/.test(t)){
+  addBubble('شكرًا لمشاركتك. قصة النجاح لفتت انتباهك، ومن الجيد تذكّر أن تجربة شخص لا تضمن النتيجة نفسها للجميع؛ فالنتائج تختلف حسب الجهد والظروف.');
+ }else{
+  addBubble('شكرًا لك على مشاركة رأيك. جميل أن هذا الجانب لفت انتباهك، وسأحرص أن أوضح لك تفاصيله وأجيب عن أي استفسار قبل أن تقرر.');
+ }
+}
+function isBusinessPreference(value){
+ const t=normalizeForValidation(value);
+ return /العمل\s*ال?حر|عمل\s*حر|اعمال\s*حر[هة]?|الاعمال\s*الحر[هة]?|دخل\s*اضاف|دخل\s*حر|دخل.{0,24}(حدود|مفتوح)|ما\s*له\s*حدود|غير\s*محدود|بلا\s*حدود|مشروع|مشاريع|نسب[هة]|عمول[هة]|حسب\s*الجهد|جهد.{0,12}نتائج|عمل\s*مستقل/i.test(t);
+}
+function sendBusinessPath(){
+ addBubble(`رائع، أنا أحييك على طموحك ورغبتك في صناعة مستقبلك.
+
+العمل التجاري الحر يمنحك فرصة لتطوير مهاراتك وبناء مشروعك، والسعي نحو دخل أفضل، ومعيشة أوسع، ووقت أكبر مع أسرتك، وتحقيق أحلامك التي طالما أجلتها.
+
+والأجمل أنك لست مضطرا إلى ترك وظيفتك؛ ابدأ بالتعلم والعمل تدريجيا، وإذا تحسنت أوضاعك وأصبح مشروعك مناسبا للتفرغ، فالقرار يعود إليك.
+
+المهم أن تبني مستقبلك خطوة بخطوة، لا أن تخاطر باستقرارك.`);
+ ask('','بعد ما تعرّفت على الفرق بين الوظيفة والمشروع التجاري الحر، هل أنت مستعد لتحدي طموحاتك؟','businessReady','اكتب ردك هنا');
+}
+function next(key,val){
+ if(key==='permission'){ask('','هل أنت طالب أم موظف؟ وما هو عملك الحالي؟','workDetails','اكتب إجابتك هنا');}
+ else if(key==='workDetails'){
+  data.workDetails=val;
+  const selectedProfile=getProfile(val);
+  data.profile=selectedProfile;
+  addBubble(profileReply(selectedProfile));
+  if(['student','seeker','homemaker'].includes(selectedProfile)){ask('','ما أكثر شيء تتمنى أن يتحسن في وضعك الحالي؟','wish','اكتب إجابتك هنا');}
+  else if(['employee','worker'].includes(selectedProfile)){addBubble(selectedProfile==='worker'?'الله يبارك لك في عملك.':'الله يبارك لك في وظيفتك.');ask('','ومنذ متى وأنت تعمل في هذا المجال؟','duration','اكتب إجابتك بحرية');}
+  else{ask('','ما أكثر شيء تتمنى أن يتحسن في وضعك الحالي؟','wish','اكتب إجابتك هنا');}
+ }else if(key==='duration'){addBubble(`ما شاء الله، ${val} تدل على أنك شخص ملتزم وتحب الاستقرار في عملك، وهذه صفة جميلة.`);ask('','ما أكثر شيء تتمنى أن يتحسن في عملك الحالي؟','wish','اكتب إجابتك هنا');}
+ else if(key==='wish'){addBubble('أفهمك تمامًا.');ask('التفكير بالمستقبل','ولو بقي وضعك كما هو اليوم خلال السنوات الخمس القادمة، هل ستكون راضيًا عن النتيجة؟','future','اكتب إجابتك هنا');}
+ else if(key==='future'){addBubble(`${honorific()} ${data.name}...\n\nمن خلال حديثنا، فهمت أنك تبحث عن ${goalContext()}.\nهل هذا صحيح؟`);ask('تأكيد الفهم','','summary','اكتب إجابتك هنا');}
+ else if(key==='summary'){if(/لا|غير صحيح|ليس تمام|تصحيح/i.test(val)){ask('توضيح الفهم','ما الذي تريد تصحيحه في فهمي لاحتياجك؟','correction','اكتب التصحيح هنا');}else askProjectQuestion();}
+ else if(key==='correction'){addBubble('شكرًا لك على التوضيح.');addBubble(`من خلال حديثنا، فهمت أنك تبحث عن فرصة تناسب ما أوضحته لي، وتساعدك على تحقيق أهدافك. هل فهمت احتياجك بشكل صحيح؟`);ask('تأكيد الفهم','','summary2','اكتب إجابتك هنا');}
+ else if(key==='summary2'){if(/لا|غير صحيح/i.test(val))ask('توضيح الفهم','ما الذي أحتاج إلى تصحيحه؟','correction','اكتب التصحيح هنا');else askProjectQuestion();}
+ else if(key==='interest'){if(/لا|غير مناسب|لا أبحث/i.test(val)){addBubble('أقدّر صراحتك، والقرار لك.');finish();}else{addBubble('ولو كان المشروع لا يشترط خبرة سابقة، ويوجد تدريب ومتابعة خطوة بخطوة حتى تتقنه. وقروبات خاصة بالنساء وقروبات خاصة بالرجال..\nهل سيعطيك ذلك ثقة أكبر للبدء؟');ask('التدريب والمتابعة','','confidence','اكتب إجابتك هنا');}}
+ else if(key==='confidence'){addBubble('ممتاز، حلو، شيء جميل.');addBubble('حتى يكون قرارك مبنيًا على معرفة كاملة، أفضّل أن تتعرف على الفكرة بنفسك...\nسأرسل لك شرحًا مختصرًا يتكون من:\n🎧 فيديو قصير جدًا عن صناعة البيع المباشر والمشروع.\n🎥 وقصة نجاح.\n📖 وكتالوج المنتجات.\nبعد مشاهدتها، سأجيب عن جميع استفساراتك بكل شفافية، ثم تقرر بنفسك إن كانت هذه الفرصة تناسبك أم لا.\nهل يناسبك أن أرسلها لك؟');ask('إرسال المواد التعريفية','','send','اكتب إجابتك هنا');}else if(key==='continue'){if(/نعم|أتابع|موافق|تمام|اكمل|أكيد/i.test(val)){addBubble('ممتاز جدًا. أنا أحيّي طموحك.');ask('إرسال المواد التعريفية','حتى يكون قرارك مبنيًا على معرفة كاملة، أفضّل أن تتعرف على الفكرة بنفسك. سأرسل لك فيديو البيع المباشر، وقصة نجاح، وكتالوج المنتجات. هل يناسبك أن أرسلها لك؟','send','اكتب إجابتك هنا');}else finish();}
+ else if(key==='send'){if(/لا|ليس الآن|لاحقًا|بعدين/i.test(val)){ask('تحديد موعد','متى يناسبك أن نتابع؟ اكتب الوقت الذي يناسبك.','customTime','اكتب الوقت الذي يناسبك');}else showAppointment();}
+ else if(key==='customTime'){data.time=val;showAppointment();}
+ else if(key==='appointment'){handleAppointmentChoice(val);}
+ else if(key==='watched'){if(/تمت المشاهدة|شاهدت|انتهيت|تم/i.test(val)){addBubble('شكرًا لك، الآن نكمل حديثنا عن الفكرة بكل شفافية.');ask('مناقشة الفكرة','بما أنك اطلعت على الفيديوهات والكتالوج، سوف أقدم لك بعض الأسئلة. هل أنت جاهز؟','ready','اكتب ردك هنا');}else{ask('متابعة العرض','تابع، وعندما تكون جاهزًا أخبرني أنك جاهز لنناقشك، لأنني سوف أقدم لك بعض الأسئلة.','watched','اكتب ردك هنا');}}
+ else if(key==='ready'){addBubble('أهلًا وسهلًا بك.');ask('السؤال الأول','من خلال مشاهدتك الفيديوهات السابقة، ما الشيء الذي لفت انتباهك أو أعجبك؟ اكتب رأيك كما تحب.','liked','اكتب رأيك هنا كما تحب');}
+ else if(key==='liked'){replyToLiked(val);ask('السؤال الثاني','كم عمر الشركة، وماذا يعني لك هذا العمر؟','companyAge','اكتب إجابتك هنا');}
+ else if(key==='companyAge'){addBubble('أحييك على طموحك وتركيزك، وواضح أنك متابع باهتمام.');ask('السؤال الثالث','كم عدد أعضاء الشركة، وماذا يعني لك هذا الرقم؟','members','اكتب إجابتك هنا');}
+ else if(key==='members'){addBubble('ما شاء الله عليك وعلى همتك، صراحة أنت متميز.');ask('السؤال الرابع','في كم دولة تتواجد الشركة، وماذا يعني لك هذا الانتشار؟','countries','اكتب إجابتك هنا');}
+ else if(key==='countries'){addBubble('إجابتك تدل على تركيزك وهمّتك والتزامك، وهذا شيء مميز.');ask('السؤال الخامس','من خلال اطلاعك على كتالوج المنتجات، ما انطباعك عنها أو كم منتجًا تتذكر؟ أجب بالطريقة التي تناسبك، ولا يشترط ذكر أسماء المنتجات.','products','اكتب إجابتك هنا');}
+ else if(key==='products'){addBubble('ما شاء الله عليك، إجابتك تبين اهتمامك ومتابعتك، أنت متميز.');ask('السؤال السادس','من منظور تجاري، ماذا تعني لك العضوية العالمية والفروع في دول متعددة والمنتجات المتنوعة؟','global','اكتب إجابتك هنا');}
+ else if(key==='global'){addBubble('يا سلام، شكرًا على إجابتك.');ask('السؤال السابع','هل أنت من الأشخاص الذين يتأثرون بكلام الناس ويتوقفون، أم أنك تصرّ على هدفك ولا تستسلم من أول محاولة؟','persistence','اكتب إجابتك هنا');}
+ else if(key==='persistence'){ask('السؤال الثامن','لو تم قبولك معنا، ماذا تفضّل: راتبًا ثابتًا أم نسبةً حسب الجهد والنتائج؟','incomeType','اكتب إجابتك هنا');}
+ else if(key==='incomeType'){
+  const answer=normalizeForValidation(val);
+  if(isBusinessPreference(val)){sendBusinessPath();}
+  else if(/راتب|معاش|مرتب|وظيف/i.test(answer)){
+   addBubble(`خليني أسألك سؤالا مهما...
+
+هل تشعر أن الاعتماد على الوظيفة وحدها قد يجعل تحقيق طموحاتك المالية أمرا صعبا، خصوصا مع ارتفاع تكاليف المعيشة ومحدودية الدخل لدى كثير من الناس؟
+
+أم أنك تتمنى أن تمتلك مشروعا تجاريا خاصا بك، وتعمل على تطويره وبناء مصدر دخل إضافي إلى جانب عملك الحالي؟`);
+   ask('','','salaryDirection','اكتب إجابتك هنا');
+  }else{sendBusinessPath();}
+ }
+ else if(key==='salaryDirection'){
+  const answer=normalizeForValidation(val);
+  if(isBusinessPreference(val)||/نعم|ايوه|اجل|موافق|اريد|اتمنى|اطمح|ممتاز|حلو|جيد|رائع|تمام|مستعد/i.test(answer)){
+   sendBusinessPath();
+  }else if(/^(لا|كلا|مش|ما اريد|لا اريد|لا ارغب|الوظيفه فقط|راتب ثابت فقط)$/i.test(answer)){
+   addBubble('أفهمك، خذ وقتك في التفكير. وإذا رغبت في معرفة المزيد عن العمل التجاري لاحقًا، فأنا هنا لمساعدتك.');
+  }else{
+   addBubble('هل تميل إلى امتلاك مشروع تجاري أو بناء دخل إضافي إلى جانب وظيفتك؟');
+   ask('','','salaryDirection','اكتب إجابتك هنا');
+  }
+ }
+ else if(key==='businessReady'){
+  addBubble(`🌟 ممتاز، أنا أحييك وأحيي طموحك، وأقدّر رغبتك في تحسين مستقبلك المالي.
+
+🎯 الآن أحب أن أتعرف على طموحاتك المالية بشكل أوضح...
+
+إذا بدأت معنا في هذا المشروع التجاري، فما الدخل الشهري الذي تطمح إلى تحقيقه مستقبلا؟
+
+💰 هل تطمح إلى:
+🔹 100 دولار شهريا؟
+🔹 200 دولار شهريا؟
+🔹 500 دولار شهريا؟
+🔹 1000 دولار شهريا؟
+🔹 أم تطمح إلى مبلغ أكبر؟
+
+🚀 اختر المبلغ الذي تطمح إلى الوصول إليه، حتى أتمكن من فهم هدفك بشكل أفضل.`);
+  ask('تحديد الطموح المالي','','incomeGoal','اكتب مبلغك بالأرقام');
+ }
+ else if(key==='incomeGoal'){if(!/\d/.test(val)){ask('تحديد الطموح المالي','من فضلك اكتب مبلغًا محددًا بالأرقام، مثل 100 أو 300 أو 500 أو 1000 أو 50000 أو 100000 دولار.','incomeGoal','اكتب مبلغًا بالأرقام');return;}ask('السؤال العاشر','لتحقيق هدفك المالي، هل تستطيع تخصيص ساعتين إلى ثلاث ساعات يوميًا على الأقل للتعلم والعمل؟ تذكّر أن الدخل غير مضمون ويختلف حسب الجهد والنتائج.','dailyTime','اكتب إجابتك هنا');}
+ else if(key==='dailyTime'){addBubble('تحقيق الأهداف يحتاج إلى تعلّم والتزام، ولا يوجد دخل مضمون أو نتيجة مضمونة.');ask('السؤال الحادي عشر','إذا كان بعض أصحاب المهن يقضون سنوات في الدراسة والخبرة قبل الوصول إلى دخلهم، فهل أنت مستعد للتعلم وبذل الجهد على مدى سنتين إلى ثلاث سنوات، مع إدراك أن النتائج تختلف من شخص لآخر؟','longTerm','اكتب إجابتك هنا');}
+ else if(key==='longTerm'){ask('السؤال الثاني عشر','هل أنت مستعد للتدرب والتعلم وتنفيذ المهام اليومية واتباع إرشادات التدريب؟','training','اكتب إجابتك هنا');}
+ else if(key==='training'){addBubble('أريد منك أن تكون صادقًا مع أحلامك، وأن تلتزم بالتعلم. ومن المهم أيضًا ألا تتحدث عن تجربة المنتجات من منظور شخصي قبل أن تجربها بنفسك.');ask('السؤال الثالث عشر','هل توافق على تجربة المنتجات حسب قدرتك واستطاعتك، دون ضغط أو إلزام؟','productsPromise','اكتب إجابتك هنا');}
+ else if(key==='productsPromise'){showWhatsAppRegistration();}
+ else if(key==='questions'){addBubble('شكرًا لك على طرح أسئلتك. تُجاب عنها بكل شفافية قبل اتخاذ أي قرار.');ask('متابعة النقاش','هل أجبتك عن استفساراتك، وهل ترغب في متابعة أسئلة التعارف؟','ready','اكتب ردك هنا');}
+}
+
+function showWhatsAppRegistration(){
+ progressMode='terminal';currentRecord.status='وصل إلى خطوة التواصل عبر واتساب';persistRecord();
+ addBubble('ممتاز، لقد أنجزنا خطوات التعارف ومناقشة الفكرة. بقيت خطوة واحدة فقط: التأكد من أن الفيديوهات تعمل لديك، ثم نتابع إجراءات التسجيل عبر واتساب.');
+ const number='+967774733194';
+ const message=`السلام عليكم أستاذ صادق المرغمي، أنا ${data.name||'مهتم'}، أنهيت مشاهدة مواد عرض الفكرة وأرغب في متابعة خطوة التسجيل.`;
+ const url='https://wa.me/967774733194?text='+encodeURIComponent(message);
+ show('الخطوة التالية: التواصل عبر واتساب','',`<p class="small">يمكنك إرسال رسالة عبر واتساب لنبدأ خطوة التسجيل معًا. لا تحتاج إلى تعبئة بيانات العضوية داخل هذا التطبيق.</p><a class="whatsapp" href="${url}" target="_blank" rel="noopener">مراسلتنا على الواتساب</a><p class="small" style="margin-top:12px">قبل المتابعة، تأكد من أن الفيديوهات والكتالوج فتحت وعملت لديك بصورة صحيحة.</p><button class="light" style="width:100%;margin-top:8px" onclick="restart()">بدء محادثة جديدة</button>`);
+}
+
+function askProjectQuestion(){addBubble(`ولو وجدت ${goalContext()}...\nهل هذه فرصة تبحث عنها؟`);ask('الفرصة المناسبة','','interest','اكتب إجابتك هنا');}
+function normalizeAppointmentText(value){
+ return String(value??'').replace(/[٠-٩]/g,c=>String('٠١٢٣٤٥٦٧٨٩'.indexOf(c))).replace(/[۰-۹]/g,c=>String('۰۱۲۳۴۵۶۷۸۹'.indexOf(c))).replace(/[ًٌٍَُِّْـ]/g,'').toLowerCase().replace(/[أإآٱ]/g,'ا').replace(/ة/g,'ه').replace(/ى/g,'ي').replace(/[\u200e\u200f]/g,'').replace(/\s+/g,' ').trim();
+}
+function parseAppointment(value){
+ const t=normalizeAppointmentText(value),now=Date.now();
+ if(/(^|\s)(الان|الحين|دحين|حاليا)(\s|$)/.test(t)||/انا فاضي|انا متفرغ|جاهز الان/.test(t))return {kind:'now',at:now};
+ const numberWords={
+  'واحد':1,'واحده':1,'اولى':1,'الاولى':1,'الواحده':1,
+  'اثنين':2,'اثنتين':2,'اثنان':2,'اثنتا':2,'الثانيه':2,
+  'ثلاث':3,'ثلاثه':3,'الثالثه':3,
+  'اربع':4,'اربعه':4,'الرابعه':4,
+  'خمس':5,'خمسه':5,'الخامسه':5,
+  'ست':6,'سته':6,'السادسه':6,
+  'سبع':7,'سبعه':7,'السابعه':7,
+  'ثمان':8,'ثمانيه':8,'الثامنه':8,
+  'تسع':9,'تسعه':9,'التاسعه':9,
+  'عشر':10,'عشره':10,'العاشره':10,
+  'احد عشر':11,'احدى عشر':11,'الحاديه عشره':11,'الحادي عشر':11,
+  'اثنا عشر':12,'اثني عشر':12,'اثنتا عشر':12,'الثانيه عشره':12,
+  'ثلاثه عشر':13,'الثالثه عشره':13,'اربعه عشر':14,'الرابعه عشره':14,
+  'خمسه عشر':15,'الخامسه عشره':15,'سته عشر':16,'سته عشره':16,'السادسه عشره':16,
+  'سبعه عشر':17,'السابعه عشره':17,'ثمانيه عشر':18,'الثامنه عشره':18,
+  'تسعه عشر':19,'التاسعه عشره':19,'عشرين':20,'عشرون':20,
+  'ثلاثين':30,'ثلاثون':30,'اربعين':40,'اربعون':40,'خمسين':50,'خمسون':50,
+  'ستين':60,'ستون':60,'سبعين':70,'سبعون':70,'ثمانين':80,'ثمانون':80,'تسعين':90,'تسعون':90,
+  'واحد وعشرين':21,'واحد وعشرون':21,'اثنين وعشرين':22,'اثنين وعشرون':22,
+  'ثلاثه وعشرين':23,'ثلاث وعشرين':23,'اربعه وعشرين':24,'اربع وعشرين':24
+ };
+ const escapeRegex=x=>x.replace(/[.*+?^${}()|[\]\\]/g,'\\$&').replace(/\s+/g,'\\s+');
+ const words=Object.keys(numberWords).sort((a,b)=>b.length-a.length).map(escapeRegex).join('|');
+ let minutes=null;
+ if(/^(?:بعد\s*)?(?:نصف|نص)\s*ساعه$/.test(t))minutes=30;
+ else if(/^(?:بعد\s*)?ربع\s*ساعه$/.test(t))minutes=15;
+ else if(/^(?:بعد\s*)?ساعه\s*ونصف$/.test(t)||/^(?:بعد\s*)?ساعه\s*ونص$/.test(t))minutes=90;
+ else if(/^(?:بعد\s*)?ساعتين\s*ونصف$/.test(t))minutes=150;
+ else if(/^(?:بعد\s*)?ساعتين$/.test(t))minutes=120;
+ else if(/^(?:بعد\s*)?يوم(?:\s*واحد|\s*كامل)?$/.test(t))minutes=24*60;
+ else if(/^(?:بعد\s*)?دقيقتين$/.test(t))minutes=2;
+ else if(/^(?:بعد\s*)?دقيقه$/.test(t))minutes=1;
+ else if(/^(?:بعد\s*)?ساعه$/.test(t))minutes=60;
+ else {
+  const unit='دقيقتين|دقيقتان|دقائق|دقيقه|دقايق|دقيق|min(?:ute)?s?|ساعتين|ساعتان|ساعات|ساعه|hour(?:s)?';
+  const duration=t.match(new RegExp('(?:^|\\s)(?:بعد\\s*)?(\\d{1,5}|'+words+')\\s*('+unit+')(?=\\s|$)','i'));
+  if(duration){const token=duration[1].replace(/\s+/g,' ');const n=/^\d+$/.test(token)?Number(token):numberWords[token];if(Number.isFinite(n)){minutes=/^(?:دقيق|دقائ|دقايق|min)/i.test(duration[2])?n:n*60;}}
+ }
+ if(minutes!==null){if(minutes<1||minutes>24*60)return {kind:'range'};return {kind:'future',at:now+minutes*60000};}
+ let hour=null,minute=0,explicitMinutes=false;
+ const clock=t.match(/(?:^|\s)(?:الساعه\s*)?(\d{1,2})(?:\s*[:.]\s*(\d{1,2}))?\s*(am|pm)?(?=\s|$)/i);
+ if(clock){hour=Number(clock[1]);minute=Number(clock[2]||0);explicitMinutes=clock[2]!==undefined;}
+ else {
+  const hourWords=Object.keys(numberWords).sort((a,b)=>b.length-a.length);
+  for(const word of hourWords){const re=new RegExp('(?:^|\\s)(?:الساعه\\s*)?'+escapeRegex(word)+'(?=\\s|$)','i');if(re.test(t)){hour=numberWords[word];break;}}
+ }
+ if(hour===null)return {kind:'invalid'};
+ if(hour<0||hour>23||minute<0||minute>59)return {kind:'invalid'};
+ const am=/صباح|فجر|\bam\b/.test(t),pm=/مساء|مغرب|عصر|ليل|عشاء|ظهر|\bpm\b|\bnoon\b/.test(t);
+ const noon=/ظهر|\bnoon\b/.test(t),midnight=/منتصف\s*الليل|\bmidnight\b/.test(t);
+ const tomorrow=/غدا|بكره|اليوم التالي/.test(t);
+ if(hour>=1&&hour<=12&&!am&&!pm&&!explicitMinutes)return {kind:'ambiguous'};
+ if(hour===12&&(am||midnight))hour=0;
+ else if(hour===12&&(pm||noon))hour=12;
+ else if(hour<12&&pm)hour+=12;
+ const d=new Date(now);if(tomorrow)d.setDate(d.getDate()+1);d.setHours(hour,minute,0,0);
+ if(d.getTime()<=now&&!tomorrow)return {kind:'past'};
+ return {kind:'future',at:d.getTime()};
+}
+function handleAppointmentChoice(value){
+ const result=parseAppointment(value);
+ if(result.kind==='invalid'||result.kind==='range'){addBubble('لم أتمكن من تحديد الموعد. أعد كتابة الوقت الذي يناسبك بصيغة أوضح، من فضلك.');ask('موعد مشاهدة العرض','اكتب الوقت الذي يناسبك.','appointment','اكتب الوقت الذي يناسبك');return;}
+ if(result.kind==='ambiguous'){addBubble('هل تقصد هذا الوقت صباحًا أم مساءً؟ اكتب الوقت مع تحديد الفترة.');ask('توضيح الموعد','هل تقصد صباحًا أم مساءً؟','appointment','اكتب الوقت الذي تقصده');return;}
+ if(result.kind==='past'){addBubble('الوقت الذي كتبته قد مضى بحسب ساعة هاتفك. هل تقصد غدًا في الوقت نفسه، أم تختار وقتًا قادمًا؟');ask('تعديل الموعد','اكتب موعدًا قادمًا مع تحديد صباحًا أو مساءً.','appointment','اكتب الوقت الذي يناسبك');return;}
+ data.time=value;data.appointmentAt=result.at;
+ if(result.kind==='now'||result.at<=Date.now()){data.time=value||'الآن';showMedia();return;}
+ progressMode='waiting';currentRecord.status='ينتظر موعد عرض المواد';persistRecord();
+ addBubble(`تمام، سجّلت موعدك: ${value}.\nفضلاً اضبط منبّه هاتفك على هذا الوقت ليذكّرك، ثم ارجع إلى هذه المحادثة. ستظهر لك المواد عند حلول موعدك إذا بقيت الصفحة مفتوحة، أو عندما تعود بعد الموعد.`);
+ showWaitingAppointment();
+}
+function showWaitingAppointment(){
+ progressMode='waiting';
+ show('موعد عرض المواد','',`<p class="small">تم حفظ موعدك: <strong>${String(data.time||'').replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]))}</strong></p><p class="small">لن تظهر المواد قبل الموعد. اضبط منبّه هاتفك، ثم ارجع إلى المحادثة. إذا بقيت الصفحة مفتوحة، ستظهر المواد تلقائيًا عند حلول الوقت.</p>`);
+ scheduleAppointmentCheck();
+}
+function scheduleAppointmentCheck(){
+ if(appointmentTimer)clearTimeout(appointmentTimer);
+ if(progressMode!=='waiting'||!Number(data.appointmentAt))return;
+ const remaining=Number(data.appointmentAt)-Date.now();
+ appointmentTimer=setTimeout(checkPendingAppointment,Math.max(50,Math.min(60000,remaining)));
+}
+function checkPendingAppointment(){
+ if(progressMode!=='waiting')return;
+ const at=Number(data.appointmentAt);
+ if(!at){ask('موعد مشاهدة العرض','اكتب الوقت الذي يناسبك.','appointment','اكتب الوقت بحرية');return;}
+ if(Date.now()>=at){if(appointmentTimer)clearTimeout(appointmentTimer);currentRecord.status='حان موعد عرض المواد';persistRecord();showMedia();return;}
+ showWaitingAppointment();
+}
+function showAppointment(){addBubble(`${honorific()}/ ${data.name} 🌹\n\nأقدّر اهتمامك وجديتك. سأجهّز لك موادًا مختصرة توضح فكرة المشروع وطريقة العمل، وستظهر لك في الوقت الذي تختاره.\n\nشاهد العرض كاملًا، وبعدها أرسل لي فقط: «تمت المشاهدة» ✅\n\nثم نتواصل في الموعد المتفق عليه، لأتأكد من وضوح الفكرة لك وأجيب عن أسئلتك بكل شفافية.\n\nمتى يناسبك تشاهد العرض؟\nاكتب الوقت الذي يناسبك.\n\n🌹 بانتظار اختيارك للوقت.`);ask('موعد مشاهدة العرض','اكتب الوقت الذي يناسبك.','appointment','اكتب الوقت الذي يناسبك');}
+function showMedia(resume=false){progressMode='media';if(!resume){addBubble(`تم تسجيل موعد المشاهدة: ${data.time||'حسب اتفاقنا'}.\nحاضر، أرسل لك المواد الآن. خذ وقتك في الاطلاع، وعندما تنتهي أخبرني لكي نتناقش.`);addBubble('إذًا بسم الله على بركة الله ♥');}show('مواد عرض الفكرة','',`<p id="mandatory-watch-status" class="small">المشاهدة إلزامية بالترتيب: أكمل الفيديو 1 من 3 للمتابعة.</p><div class="media-card"><h3>🎧 البيع المباشر</h3><video data-required-video="0" controls preload="metadata" playsinline src="asset-1.mp4"></video></div><div class="media-card"><h3>🎥 فكرة المشروع باختصار</h3><video data-required-video="1" controls preload="metadata" playsinline src="asset-2.mp4"></video></div><div class="media-card"><h3>🎥 قصة نجاح صادق المرغمي <span class="success-line">رغم المعاناة، يولد الأمل</span></h3><video data-required-video="2" controls preload="metadata" playsinline src="asset-3.mp4"></video></div><div class="media-card"><h3>📖 المنتجات والفوائد</h3><a class="catalog-link" href="#catalog-pdf" onclick="openCatalogPDF();return false" aria-label="فتح كتالوج المنتجات والفوائد PDF">فتح كتالوج المنتجات والفوائد (PDF)</a></div><form onsubmit="submitAnswer('watched');return false"><textarea id="answer" rows="2" required disabled placeholder="أكمل مشاهدة الفيديوهات أولًا"></textarea><button id="watched-submit" class="primary" type="submit" disabled>إرسال</button></form>`);initializeRequiredVideos();bindProgressDrafts();saveProgress();}
+function finish(){progressMode='terminal';currentRecord.status='أنهى المحادثة دون متابعة التسجيل';persistRecord();addBubble(`شكرًا لك ${honorific()} ${data.name||''} 🌹\nانتهت خطوات التعارف. إذا رغبت في التواصل معي مباشرة، يمكنك استخدام واتساب.`);const number='+967774733194',message=`السلام عليكم أستاذ صادق المرغمي، أنا ${data.name||'مهتم'}، شاهدت مواد عرض الفكرة وأرغب في التواصل معك.`;const url='https://wa.me/967774733194?text='+encodeURIComponent(message);show('التواصل المباشر','',`<a class="whatsapp" href="${url}" target="_blank" rel="noopener">فتح واتساب · ${number}</a><button class="light" style="width:100%;margin-top:8px" onclick="restart()">بدء محادثة جديدة</button>`);}
+function restart(){if(appointmentTimer)clearTimeout(appointmentTimer);appointmentTimer=null;try{localStorage.removeItem(PROGRESS_KEY);}catch(e){}progressMode='start';mediaProgress={current:[0,0,0],furthest:[0,0,0],completed:[false,false,false]};chat.innerHTML='';Object.keys(data).forEach(k=>data[k]='');started=false;show('أهلًا وسهلًا بك','',`<button class="primary" onclick="begin()">أرغب بمعرفة تفاصيل فرصة العمل</button>`);}
+if(!restoreProgress())show('أهلًا وسهلًا بك','',`<button class="primary" onclick="begin()">أرغب بمعرفة تفاصيل فرصة العمل</button>`);
+</script>
+</body>
+</html>
